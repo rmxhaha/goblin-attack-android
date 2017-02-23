@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1071948754009",
+    "firebase_url": "https://pbd-test.firebaseio.com",
+    "project_id": "pbd-test",
+    "storage_bucket": "pbd-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1071948754009:android:2a19848b8273f0ad",
+        "android_client_info": {
+          "package_name": "twice.pbdtest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1071948754009-qm0nl6ppt52ccr7821rqnomqmnhbgokv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA11oowr2U3NLKRSpAU5f11lI3Jlg5ieoo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,187 @@
+package twice.pbdtest.AddFriend;
+
+import android.app.Instrumentation;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pManager;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import twice.pbdtest.R;
+
+public class AddFriendActivity extends AppCompatActivity {
+    private BluetoothAdapter mBluetoothAdapter;
+    private Set<BluetoothDevice> mPairedDevices;
+    ListView mListView;
+    private static final String TAG = "AddFriendActivity";
+    private static final String bluetoothName = "GoblinAttackFriendshipProtocol";
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private ShakeDetector mShakeDetector;
+
+    // Create a BroadcastReceiver for ACTION_FOUND.
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                // Discovery has found a device. Get the BluetoothDevice
+                // object and its info from the Intent.
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                String deviceName = device.getName();
+                String deviceHardwareAddress = device.getAddress(); // MAC address
+                if( deviceName.startsWith(bluetoothName) ){
+                    attemptFriendship(device);
+                }
+                Log.v(TAG, deviceName);
+            }
+        }
+    };
+
+    private ConnectThread mConnectThread;
+    private AcceptThread mAcceptThread;
+
+    private void attemptFriendship(BluetoothDevice device) {
+        String targetuid = device.getName().substring( bluetoothName.length() );
+
+        // firebase add friend di sini
+        TextView t = (TextView) findViewById(R.id.message);
+        t.setText("You are now friend with "+targetuid);
+        /*
+        mBluetoothAdapter.cancelDiscovery();
+        final ConnectThread mConnectThread = new ConnectThread(device);
+        final AcceptThread mAcceptThread = new AcceptThread(mBluetoothAdapter);
+        mConnectThread.setOnConnectedListener(new ConnectThread.OnConnectedListener() {
+            @Override
+            public void onConnected(BluetoothSocket socket) {
+                Log.v(TAG, "Friendship Established");
+            }
+        });
+        Log.v(TAG,"TESTing");
+        mAcceptThread.setOnConnectedListener(new AcceptThread.OnConnectedListener() {
+            @Override
+            public void onConnected(BluetoothSocket bs) {
+                Log.v(TAG, "Friendship Established");
+
+            }
+        });
+        Thread ct = new Thread(){
+            @Override
+            public void run(){
+                mConnectThread.run();
+            }
+        };
+        Thread at = new Thread(){
+            @Override
+            public void run(){
+                mAcceptThread.run();
+            }
+        };
+        at.start();
+        ct.start();
+        */
+
+    }
+
+    private void initShakeDetector() {
+        // ShakeDetector initialization
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager
+                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mShakeDetector = new ShakeDetector();
+        mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
+
+            @Override
+            public void onShake(int count) {
+				/*
+				 * The following method, "handleShakeEvent(count):" is a stub //
+				 * method you would use to setup whatever you want done once the
+				 * device has been shook.
+				 */
+                handleShakeEvent(count);
+            }
+        });
+    }
+
+    private void handleShakeEvent(int count) {
+        initiateFriendship();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_friend);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(mReceiver, filter);
+//        initShakeDetector();
+        initiateFriendship();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Don't forget to unregister the ACTION_FOUND receiver.
+        unregisterReceiver(mReceiver);
+    }
+
+    protected void initiateFriendship(){
+        String myuid = "Sample UUUUUUID";
+
+        mBluetoothAdapter.setName(bluetoothName + myuid);
+        requestBluetooth();
+    }
+
+    protected void requestBluetooth(){
+        /*
+        if( !mBluetoothAdapter.isEnabled() ){
+            Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(turnOn, 0);
+        }
+        else {
+            Log.v(TAG, "Bluetooth is ON");
+        }
+        */
+        Intent getVisible = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        startActivityForResult(getVisible, 0);
+
+        mBluetoothAdapter.startDiscovery();
+    }
+
+    /* register the broadcast receiver with the intent values to be matched */
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+    /* unregister the broadcast receiver */
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+
+
+}

@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Pbdtest</string>
+    <string name="title_activity_add_friend">Add Friend</string>
+    <string name="AddFriendInstruction">
+        Get close to your new friend and shake the phone to befriend.
+    </string>
+    <string name="AddFriendButtonText">
+        Shake by pressing
+    </string>
 </resources>

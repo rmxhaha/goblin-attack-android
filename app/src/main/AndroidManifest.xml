@@ -20,19 +20,25 @@
         <activity android:name=".FormSignUp" />
         <activity android:name=".FormSignIn" />
         <activity android:name=".HomeActivity" />
-        <activity android:name=".Compass"></activity>
-        <service
-            android:name=".MyFirebaseMessagingService">
+        <activity android:name=".Compass" />
+
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
-        <service
-            android:name=".MyFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
+        <activity
+            android:name=".AddFriend.AddFriendActivity"
+            android:label="@string/title_activity_add_friend"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
+    <uses-sdk android:minSdkVersion="14" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 </manifest>

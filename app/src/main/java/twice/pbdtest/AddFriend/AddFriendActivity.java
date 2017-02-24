@@ -24,22 +24,31 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import twice.pbdtest.R;
+import twice.pbdtest.User;
 
 public class AddFriendActivity extends AppCompatActivity {
     private BluetoothAdapter mBluetoothAdapter;
     private Set<BluetoothDevice> mPairedDevices;
     ListView mListView;
     private static final String TAG = "AddFriendActivity";
-    private static final String bluetoothName = "GoblinAttackFriendshipProtocol";
+    private static final String bluetoothName = "GAFriendshipProtocol";
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
     private ShakeDetector mShakeDetector;
-
+    private FirebaseAuth mAuth;
     // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
@@ -62,11 +71,32 @@ public class AddFriendActivity extends AppCompatActivity {
     private AcceptThread mAcceptThread;
 
     private void attemptFriendship(BluetoothDevice device) {
-        String targetuid = device.getName().substring( bluetoothName.length() );
+        final String targetuid = device.getName().substring( bluetoothName.length() );
+        final String myuid = mAuth.getCurrentUser().getUid();
 
-        // firebase add friend di sini
-        TextView t = (TextView) findViewById(R.id.message);
-        t.setText("You are now friend with "+targetuid);
+        FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+        final DatabaseReference friendList = fbdb.getReference("users/"+myuid+"/friends");
+        final DatabaseReference newFriend = fbdb.getReference("users/"+targetuid);
+
+        newFriend.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user[] = new User[1];
+                user[0] = dataSnapshot.getValue(User.class);
+                friendList.child(targetuid).setValue(user[0].getName());
+
+                // firebase add friend di sini
+                TextView t = (TextView) findViewById(R.id.message);
+                t.setText("You are now friend with "+targetuid);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -126,8 +156,9 @@ public class AddFriendActivity extends AppCompatActivity {
     }
 
     protected void initiateFriendship(){
-        String myuid = "Sample UUUUUUID" + Math.random();
-
+        mAuth = FirebaseAuth.getInstance();
+        final String myuid = mAuth.getCurrentUser().getUid();
+        Log.v(TAG,myuid);
         mBluetoothAdapter.setName(bluetoothName + myuid);
         requestBluetooth();
     }

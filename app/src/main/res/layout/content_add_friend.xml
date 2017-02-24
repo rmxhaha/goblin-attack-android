@@ -23,15 +23,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
-    <Button
-        android:text="@string/AddFriendButtonText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/AddFriendInstruction"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="103dp"
-        android:id="@+id/button3" />
-
     <TextView
         android:text="..."
         android:layout_width="wrap_content"

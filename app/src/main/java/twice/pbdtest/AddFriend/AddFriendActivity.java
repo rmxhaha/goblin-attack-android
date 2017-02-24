@@ -74,41 +74,7 @@ public class AddFriendActivity extends AppCompatActivity {
                 //Do something after 100ms
                 mBluetoothAdapter.cancelDiscovery();
             }
-        }, 5000);
-
-        /*
-        final ConnectThread mConnectThread = new ConnectThread(device);
-        final AcceptThread mAcceptThread = new AcceptThread(mBluetoothAdapter);
-        mConnectThread.setOnConnectedListener(new ConnectThread.OnConnectedListener() {
-            @Override
-            public void onConnected(BluetoothSocket socket) {
-                Log.v(TAG, "Friendship Established");
-            }
-        });
-        Log.v(TAG,"TESTing");
-        mAcceptThread.setOnConnectedListener(new AcceptThread.OnConnectedListener() {
-            @Override
-            public void onConnected(BluetoothSocket bs) {
-                Log.v(TAG, "Friendship Established");
-
-            }
-        });
-        Thread ct = new Thread(){
-            @Override
-            public void run(){
-                mConnectThread.run();
-            }
-        };
-        Thread at = new Thread(){
-            @Override
-            public void run(){
-                mAcceptThread.run();
-            }
-        };
-        at.start();
-        ct.start();
-        */
-
+        }, 10000);
     }
 
     private void initShakeDetector() {
@@ -132,6 +98,9 @@ public class AddFriendActivity extends AppCompatActivity {
     }
 
     private void handleShakeEvent(int count) {
+        TextView t = (TextView) findViewById(R.id.message);
+        t.setTextSize(20);
+        t.setText("Shaken");
         initiateFriendship();
     }
 
@@ -145,8 +114,7 @@ public class AddFriendActivity extends AppCompatActivity {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(mReceiver, filter);
-//        initShakeDetector();
-        initiateFriendship();
+        initShakeDetector();
     }
 
     @Override
@@ -184,11 +152,16 @@ public class AddFriendActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // Add the following line to register the Session Manager Listener onResume
+        mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
+
     }
     /* unregister the broadcast receiver */
     @Override
     protected void onPause() {
         super.onPause();
+        // Add the following line to unregister the Sensor Manager onPause
+        mSensorManager.unregisterListener(mShakeDetector);
     }
 
 

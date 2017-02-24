@@ -14,6 +14,7 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -66,8 +67,16 @@ public class AddFriendActivity extends AppCompatActivity {
         // firebase add friend di sini
         TextView t = (TextView) findViewById(R.id.message);
         t.setText("You are now friend with "+targetuid);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something after 100ms
+                mBluetoothAdapter.cancelDiscovery();
+            }
+        }, 5000);
+
         /*
-        mBluetoothAdapter.cancelDiscovery();
         final ConnectThread mConnectThread = new ConnectThread(device);
         final AcceptThread mAcceptThread = new AcceptThread(mBluetoothAdapter);
         mConnectThread.setOnConnectedListener(new ConnectThread.OnConnectedListener() {
@@ -149,7 +158,7 @@ public class AddFriendActivity extends AppCompatActivity {
     }
 
     protected void initiateFriendship(){
-        String myuid = "Sample UUUUUUID";
+        String myuid = "Sample UUUUUUID" + Math.random();
 
         mBluetoothAdapter.setName(bluetoothName + myuid);
         requestBluetooth();

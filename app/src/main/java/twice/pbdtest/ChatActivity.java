@@ -163,4 +163,10 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void callHistory(View view){
+        Intent intentHistory = new Intent(this, ChatHistoryActivity.class);
+        intentHistory.putExtra("uid",receiverUID);
+        startActivity(intentHistory);
+    }
 }

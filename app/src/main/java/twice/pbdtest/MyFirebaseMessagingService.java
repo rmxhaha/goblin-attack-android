@@ -43,11 +43,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     //This method to generate push notification
-    private void sendNotification(String messageBody) {
-
+    private void sendNotification(String messageBody, final RemoteMessage remoteMessage) {
+        Intent intent;
         //MainActivity Intent Registration
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if(mAuth.getCurrentUser()==null) {
+            intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        }
+        else{
+            intent = new Intent(this, ChatActivity.class);
+            intent.putExtra("name",senderName);
+            intent.putExtra("uid",remoteMessage.getNotification().getTitle());
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        }
         PendingIntent pendingIntent;
         pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
@@ -77,7 +85,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 senderName = user.getName();
-                sendNotification(remoteMessage.getNotification().getBody());
+                sendNotification(remoteMessage.getNotification().getBody(), remoteMessage);
             }
 
             @Override

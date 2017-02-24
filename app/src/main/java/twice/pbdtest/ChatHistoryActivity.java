@@ -1,8 +1,10 @@
 package twice.pbdtest;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,31 +22,31 @@ import java.util.Vector;
 public class ChatHistoryActivity extends AppCompatActivity {
     ListView listView ;
     private FirebaseAuth mAuth;
+    private String receiverUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_history);
 
-        Vector<String> vecStr = new Vector();
+        Intent intent = getIntent();
+        receiverUID = intent.getStringExtra("uid");
+
         mAuth = FirebaseAuth.getInstance();
+        System.out.println(receiverUID);
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = fbdb.getReference("users");
-        databaseReference.child(mAuth.getCurrentUser().getUid() + "/chats").addValueEventListener(new ValueEventListener(){
+        databaseReference.child(mAuth.getCurrentUser().getUid() + "/chats/" + receiverUID).addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Vector<String> vecName = new Vector();
-                Vector<String> vecUId = new Vector();
+                Vector<Chat> vecChat = new Vector();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     // TODO: handle the post
-                    String key = postSnapshot.getKey();
-                    Object obj = postSnapshot.getValue();
-                    vecUId.add(key);
-                    vecName.add(obj.toString());
+                    Chat c = postSnapshot.getValue(Chat.class);
+                    vecChat.add(c);
                 }
                 listView = (ListView) findViewById(R.id.list);
-                ((ViewManager)listView.getParent()).removeView(listView);
-                initList(vecName,vecUId);
+                initList(vecChat);
             }
 
             @Override
@@ -54,16 +56,21 @@ public class ChatHistoryActivity extends AppCompatActivity {
         });
     }
 
-    public void initList(final Vector<String> vecName, final Vector<String> vecUId){
+    public void initList(final Vector<Chat> vecChat){
         listView = (ListView) findViewById(R.id.list);
 
-        String[] name = new String[vecName.size()];
-        for(int i=0; i<vecName.size(); i++){
-            name[i] = vecName.get(i);
+        String[] body = new String[vecChat.size()];
+        for(int i=0; i<vecChat.size(); i++){
+            body[i] = vecChat.get(i).body;
+            System.out.println(body[i]);
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, name);
+                android.R.layout.simple_list_item_1, android.R.id.text1, body);
+        for(int i=0; i<vecChat.size(); i++){
+            body[i] = vecChat.get(i).body;
+            System.out.println(body[i]);
+        }
 
         listView.setAdapter(adapter);
     }

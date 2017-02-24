@@ -68,4 +68,13 @@
         android:onClick="viewMyLocation"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:text="Collect Gem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btnShare"
+        android:layout_toEndOf="@+id/btnFList"
+        android:id="@+id/button5"
+        android:onClick="collectGem" />
+
 </RelativeLayout>

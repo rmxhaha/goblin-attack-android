@@ -17,6 +17,7 @@
     <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -53,7 +54,8 @@
             android:label="@string/title_activity_add_friend"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".FriendListActivity" />
-        <activity android:name=".UselessGPS.LocationViewer"></activity>
+        <activity android:name=".UselessGPS.LocationViewer" />
+        <activity android:name=".CollectGem.CollectGemActivity"></activity>
     </application>
 
 </manifest>

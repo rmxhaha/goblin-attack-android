@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import twice.pbdtest.AddFriend.AddFriendActivity;
+import twice.pbdtest.CollectGem.CollectGemActivity;
 import twice.pbdtest.UselessGPS.LocationViewer;
 
 import org.json.JSONObject;
@@ -71,6 +72,11 @@ public class HomeActivity extends AppCompatActivity {
 
     public void viewMyLocation(View view){
         Intent i = new Intent(this, LocationViewer.class);
+        startActivity(i);
+    }
+
+    public void collectGem(View view){
+        Intent i = new Intent(this, CollectGemActivity.class);
         startActivity(i);
     }
 }

@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class FormSignUp extends AppCompatActivity {
+public class FormSignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
 
@@ -47,7 +47,7 @@ public class FormSignUp extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
-                            Toast.makeText(FormSignUp.this, "Registration Failed :" + task.getException().getMessage(),
+                            Toast.makeText(FormSignUpActivity.this, "Registration Failed :" + task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
                             System.out.println(task.getException());
                         } else {

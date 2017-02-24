@@ -12,7 +12,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import twice.pbdtest.AddFriend.AddFriendActivity;
 
 public class HomeActivity extends AppCompatActivity {
@@ -57,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void callCompass(View view){
-        Intent intentCompass = new Intent(this, Compass.class);
+        Intent intentCompass = new Intent(this, CompassActivity.class);
         startActivity(intentCompass);
     }
 

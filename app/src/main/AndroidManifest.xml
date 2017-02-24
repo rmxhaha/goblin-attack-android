@@ -17,10 +17,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FormSignUp" />
-        <activity android:name=".FormSignIn" />
+        <activity android:name=".FormSignUpActivity" />
+        <activity android:name=".FormSignInActivity" />
         <activity android:name=".HomeActivity" />
-        <activity android:name=".Compass" />
+        <activity android:name=".CompassActivity" />
 
         <service android:name=".MyFirebaseMessagingService">
             <intent-filter>

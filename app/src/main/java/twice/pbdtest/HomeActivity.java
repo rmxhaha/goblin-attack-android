@@ -12,10 +12,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.RemoteMessage;
-
-import java.util.Random;
 
 public class HomeActivity extends AppCompatActivity {
     private String user_email;
@@ -59,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void callCompass(View view){
-        Intent intentCompass = new Intent(this, Compass.class);
+        Intent intentCompass = new Intent(this, CompassActivity.class);
         startActivity(intentCompass);
     }
 }

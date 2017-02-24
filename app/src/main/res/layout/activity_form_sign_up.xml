@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="twice.pbdtest.FormSignUp">
+    tools:context="twice.pbdtest.FormSignUpActivity">
 
     <TextView
         android:text="password :"

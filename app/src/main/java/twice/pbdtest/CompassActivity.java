@@ -12,7 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
-public class Compass extends AppCompatActivity implements SensorEventListener {
+public class CompassActivity extends AppCompatActivity implements SensorEventListener {
 
     private ImageView image;
 

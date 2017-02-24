@@ -15,13 +15,13 @@ public class MainActivity extends AppCompatActivity {
 
     //prosedur buat signup
     public void signUp(View view){
-        Intent intentSignUp = new Intent(this, FormSignUp.class);
+        Intent intentSignUp = new Intent(this, FormSignUpActivity.class);
         startActivity(intentSignUp);
     }
 
     //prosedur buat signup
     public void signIn(View view){
-        Intent intentSignIn = new Intent(this, FormSignIn.class);
+        Intent intentSignIn = new Intent(this, FormSignInActivity.class);
         startActivity(intentSignIn);
     }
 }

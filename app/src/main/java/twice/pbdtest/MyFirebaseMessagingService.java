@@ -8,6 +8,12 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -16,9 +22,9 @@ import com.google.firebase.messaging.RemoteMessage;
  */
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
-
+    private FirebaseAuth mAuth;
     private static final String TAG = "MyFirebaseMsgService";
-
+    public String senderName;
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         //Displaying data in log
@@ -26,8 +32,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
 
-        //Calling method to generate notification
-        sendNotification(remoteMessage.getNotification().getBody());
+        mAuth = FirebaseAuth.getInstance();
+        if(mAuth.getCurrentUser()!=null) {
+            Chat c = new Chat(remoteMessage.getNotification().getBody(), 0);
+            FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+            final DatabaseReference databaseReference = fbdb.getReference("users/" + mAuth.getCurrentUser().getUid() + "/chats/" + remoteMessage.getNotification().getTitle());
+            databaseReference.child(databaseReference.push().getKey()).setValue(c);
+        }
+        getName(remoteMessage.getNotification().getTitle(),remoteMessage);
     }
 
     //This method to generate push notification
@@ -39,14 +51,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent pendingIntent;
         pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
-
         //Take Notification Sound
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
         //Generate the Notification
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Firebase Notification")
+                .setContentTitle(senderName)
                 .setContentText(messageBody)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
@@ -57,5 +67,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         //Create Push Notification
         notificationManager.notify(0, notificationBuilder.build());
+    }
+
+    public void getName(String uid, final RemoteMessage remoteMessage){
+        FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+        final DatabaseReference databaseReference = fbdb.getReference("users");
+        databaseReference.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                senderName = user.getName();
+                sendNotification(remoteMessage.getNotification().getBody());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("cancelled");
+            }
+        });
     }
 }

@@ -1,14 +1,12 @@
 package twice.pbdtest;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -19,20 +17,20 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Vector;
 
-public class FriendListActivity extends AppCompatActivity {
+public class ChatHistoryActivity extends AppCompatActivity {
     ListView listView ;
     private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friend_list);
+        setContentView(R.layout.activity_chat_history);
 
         Vector<String> vecStr = new Vector();
         mAuth = FirebaseAuth.getInstance();
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = fbdb.getReference("users");
-        databaseReference.child(mAuth.getCurrentUser().getUid() + "/friends").addListenerForSingleValueEvent(new ValueEventListener(){
+        databaseReference.child(mAuth.getCurrentUser().getUid() + "/chats").addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Vector<String> vecName = new Vector();
@@ -44,6 +42,8 @@ public class FriendListActivity extends AppCompatActivity {
                     vecUId.add(key);
                     vecName.add(obj.toString());
                 }
+                listView = (ListView) findViewById(R.id.list);
+                ((ViewManager)listView.getParent()).removeView(listView);
                 initList(vecName,vecUId);
             }
 
@@ -66,18 +66,5 @@ public class FriendListActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, android.R.id.text1, name);
 
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                startIntent(vecName.get((int)id),vecUId.get((int)id));
-            }
-        });
-    }
-
-    public void startIntent(String name, String uid){
-        Intent intentChat = new Intent(this, ChatActivity.class);
-        intentChat.putExtra("name",name);
-        intentChat.putExtra("uid",uid);
-        startActivity(intentChat);
     }
 }

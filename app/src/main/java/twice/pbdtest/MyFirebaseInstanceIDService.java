@@ -28,7 +28,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
         //Displaying token on logcat
         Log.d(TAG, "Refreshed token: " + token);
-
+        mAuth = FirebaseAuth.getInstance();
         if(mAuth.getCurrentUser()!=null) {
             FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
             final DatabaseReference databaseReference = fbdb.getReference("users");

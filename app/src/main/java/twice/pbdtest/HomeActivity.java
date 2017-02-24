@@ -14,6 +14,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import twice.pbdtest.AddFriend.AddFriendActivity;
 
+import org.json.JSONObject;
+
 public class HomeActivity extends AppCompatActivity {
     private String user_email;
     private FirebaseAuth mAuth;
@@ -26,8 +28,6 @@ public class HomeActivity extends AppCompatActivity {
         //get user
         final User[] user = new User[1];
         mAuth = FirebaseAuth.getInstance();
-        user_email = mAuth.getCurrentUser().getEmail();
-        user_email = user_email.replace(".","");
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = fbdb.getReference("users");
         databaseReference.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener(){
@@ -43,8 +43,6 @@ public class HomeActivity extends AppCompatActivity {
                 System.out.println("cancelled");
             }
         });
-
-
     }
 
     public void shareIntent(View view){
@@ -60,8 +58,13 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intentCompass);
     }
 
-    public void addFriendIntent(View view){
+
+    public void addFriendIntent(View view) {
         Intent intentAddFriend = new Intent(this, AddFriendActivity.class);
         startActivity(intentAddFriend);
+    }
+    public void callFriendList(View view){
+        Intent intentFriendList = new Intent(this, FriendListActivity.class);
+        startActivity(intentFriendList);
     }
 }

@@ -12,6 +12,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class FormSignInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -41,6 +47,17 @@ public class FormSignInActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                     else{
+                        String token = FirebaseInstanceId.getInstance().getToken();
+
+                        //update token di database
+                        FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+                        final DatabaseReference databaseReference = fbdb.getReference("users");
+                        String user_id = mAuth.getCurrentUser().getUid();
+                        DatabaseReference userRef = databaseReference.child(user_id);;
+                        Map<String, Object> userUpdates = new HashMap<String, Object>();
+                        userUpdates.put("token", token);
+                        userRef.updateChildren(userUpdates);
+
                         startActivity(intentHome);
                     }
                 }

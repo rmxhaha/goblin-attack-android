@@ -29,9 +29,6 @@ public class FormSignUpActivity extends AppCompatActivity {
     public void signUp(View view){
         EditText emailView = (EditText) findViewById(R.id.editTxtEmail);
         String email = emailView.getText().toString();
-        String temp = email;
-        temp = temp.replace(".","");
-        final String email_final = temp;
         EditText passwordView = (EditText) findViewById(R.id.editTxtPassword);
         String password = passwordView.getText().toString();
         EditText nameView = (EditText) findViewById(R.id.editTxtName);

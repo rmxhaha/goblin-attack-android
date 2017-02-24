@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import twice.pbdtest.AddFriend.AddFriendActivity;
+import twice.pbdtest.UselessGPS.LocationViewer;
 
 import org.json.JSONObject;
 
@@ -66,5 +67,10 @@ public class HomeActivity extends AppCompatActivity {
     public void callFriendList(View view){
         Intent intentFriendList = new Intent(this, FriendListActivity.class);
         startActivity(intentFriendList);
+    }
+
+    public void viewMyLocation(View view){
+        Intent i = new Intent(this, LocationViewer.class);
+        startActivity(i);
     }
 }

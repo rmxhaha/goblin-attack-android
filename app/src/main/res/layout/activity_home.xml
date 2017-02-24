@@ -58,4 +58,14 @@
         android:layout_below="@+id/helloUser"
         android:layout_alignEnd="@+id/btnCompass" />
 
+    <Button
+        android:text="View My Location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button4"
+        android:layout_marginTop="17dp"
+        android:layout_below="@+id/btnShare"
+        android:onClick="viewMyLocation"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

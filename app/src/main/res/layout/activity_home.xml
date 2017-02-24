@@ -40,13 +40,22 @@
         android:onClick="callCompass" />
 
     <Button
-        android:text="Add Friend"
+        android:text="Friend List"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnShare"
-        android:layout_alignEnd="@+id/btnShare"
-        android:layout_marginTop="37dp"
+        android:layout_toEndOf="@+id/helloUser"
+        android:layout_marginTop="68dp"
+        android:id="@+id/btnFList"
+        android:onClick="callFriendList" />
+
+    <Button
+        android:text="Add Friend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/btnAddFriend"
-        android:onClick="addFriendIntent" />
+        android:onClick="addFriendIntent"
+        android:layout_below="@+id/helloUser"
+        android:layout_alignEnd="@+id/btnCompass" />
 
 </RelativeLayout>

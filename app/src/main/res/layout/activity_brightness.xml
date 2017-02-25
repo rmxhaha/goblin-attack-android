@@ -14,12 +14,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
         android:ems="10"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="65dp"
-        android:id="@+id/txtBrightness" />
+        android:id="@+id/txtBrightness"
+        android:hint="Type Brightness Here" />
 
     <Button
         android:text="Set Brightness"
@@ -29,5 +29,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="129dp"
         android:id="@+id/btn6"
+        android:padding="16dp"
+        android:background="@color/yellow"
+        android:textColor="@color/white"
         android:onClick="setBrightness" />
 </RelativeLayout>

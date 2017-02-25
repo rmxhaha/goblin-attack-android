@@ -35,17 +35,18 @@ public class HomeActivity extends AppCompatActivity {
 
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String channel = (sharedpreferences.getString("Brightness", ""));
-        System.out.println(channel);
         if (Settings.System.canWrite(this)) {
-            // To handle the auto
-            Settings.System.putInt(this.getContentResolver(),
-                    Settings.System.SCREEN_BRIGHTNESS, 20);
+            if(channel.isEmpty()==false) {
+                // To handle the auto
+                Settings.System.putInt(this.getContentResolver(),
+                        Settings.System.SCREEN_BRIGHTNESS, 20);
 
-            WindowManager.LayoutParams lp = getWindow().getAttributes();
-            float f = Float.valueOf(channel);
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                float f = Float.valueOf(channel);
 
-            lp.screenBrightness =f;// 100 / 100.0f;
-            getWindow().setAttributes(lp);
+                lp.screenBrightness = f;// 100 / 100.0f;
+                getWindow().setAttributes(lp);
+            }
         }
         else {
             Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
@@ -53,25 +54,6 @@ public class HomeActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
-
-        //get user
-        /*final User[] user = new User[1];
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
-        final DatabaseReference databaseReference = fbdb.getReference("users");
-        databaseReference.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener(){
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                user[0] = dataSnapshot.getValue(User.class);
-                TextView hello = (TextView) findViewById(R.id.helloUser);
-                hello.setText("hello " + user[0].getName());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("cancelled");
-            }
-        });*/
     }
 
     public void shareIntent(View view){

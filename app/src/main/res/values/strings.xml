@@ -7,4 +7,9 @@
     <string name="AddFriendButtonText">
         Shake by pressing
     </string>
+    <string name="menu_friend_list">Friend List</string>
+    <string name="menu_add">Add Friend</string>
+    <string name="menu_compass">Compass</string>
+    <string name="menu_location">Location</string>
+    <string name="menu_brightnerr">Brightness</string>
 </resources>

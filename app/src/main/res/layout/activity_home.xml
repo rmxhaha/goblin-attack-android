@@ -10,15 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="twice.pbdtest.HomeActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="119dp"
-        android:layout_marginTop="52dp"
-        android:id="@+id/helloUser"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
     <Button
         android:text="Share"
         android:layout_width="wrap_content"
@@ -55,7 +46,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/btnAddFriend"
         android:onClick="addFriendIntent"
-        android:layout_below="@+id/helloUser"
         android:layout_alignEnd="@+id/btnCompass" />
 
     <Button
@@ -76,5 +66,15 @@
         android:layout_toEndOf="@+id/btnFList"
         android:id="@+id/button5"
         android:onClick="collectGem" />
+
+    <Button
+        android:text="Set Brightness"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignEnd="@+id/btnCompass"
+        android:layout_marginBottom="11dp"
+        android:id="@+id/btnBrightness"
+        android:onClick="callSetBrightness" />
 
 </RelativeLayout>

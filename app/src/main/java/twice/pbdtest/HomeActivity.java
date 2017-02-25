@@ -1,9 +1,14 @@
 package twice.pbdtest;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,14 +26,36 @@ import org.json.JSONObject;
 public class HomeActivity extends AppCompatActivity {
     private String user_email;
     private FirebaseAuth mAuth;
-
+    SharedPreferences sharedpreferences;
+    public static final String MyPREFERENCES = "MyPrefs" ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        String channel = (sharedpreferences.getString("Brightness", ""));
+        System.out.println(channel);
+        if (Settings.System.canWrite(this)) {
+            // To handle the auto
+            Settings.System.putInt(this.getContentResolver(),
+                    Settings.System.SCREEN_BRIGHTNESS, 20);
+
+            WindowManager.LayoutParams lp = getWindow().getAttributes();
+            float f = Float.valueOf(channel);
+
+            lp.screenBrightness =f;// 100 / 100.0f;
+            getWindow().setAttributes(lp);
+        }
+        else {
+            Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+            intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+
         //get user
-        final User[] user = new User[1];
+        /*final User[] user = new User[1];
         mAuth = FirebaseAuth.getInstance();
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = fbdb.getReference("users");
@@ -44,7 +71,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("cancelled");
             }
-        });
+        });*/
     }
 
     public void shareIntent(View view){
@@ -70,6 +97,11 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intentFriendList);
     }
 
+    public void callSetBrightness(View view){
+        Intent intentBrightness = new Intent(this, BrightnessActivity.class);
+        startActivity(intentBrightness);
+    }
+
     public void viewMyLocation(View view){
         Intent i = new Intent(this, LocationViewer.class);
         startActivity(i);
@@ -78,5 +110,9 @@ public class HomeActivity extends AppCompatActivity {
     public void collectGem(View view){
         Intent i = new Intent(this, CollectGemActivity.class);
         startActivity(i);
+    }
+
+    public Context getActivity() {
+        return this;
     }
 }

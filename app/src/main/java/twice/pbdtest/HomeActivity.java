@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,24 +36,26 @@ public class HomeActivity extends AppCompatActivity {
 
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String channel = (sharedpreferences.getString("Brightness", ""));
-        if (Settings.System.canWrite(this)) {
-            if(channel.isEmpty()==false) {
-                // To handle the auto
-                Settings.System.putInt(this.getContentResolver(),
-                        Settings.System.SCREEN_BRIGHTNESS, 20);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Settings.System.canWrite(this)) {
+                if(channel.isEmpty()==false) {
+                    // To handle the auto
+                    Settings.System.putInt(this.getContentResolver(),
+                            Settings.System.SCREEN_BRIGHTNESS, 20);
 
-                WindowManager.LayoutParams lp = getWindow().getAttributes();
-                float f = Float.valueOf(channel);
+                    WindowManager.LayoutParams lp = getWindow().getAttributes();
+                    float f = Float.valueOf(channel);
 
-                lp.screenBrightness = f;// 100 / 100.0f;
-                getWindow().setAttributes(lp);
+                    lp.screenBrightness = f;// 100 / 100.0f;
+                    getWindow().setAttributes(lp);
+                }
             }
-        }
-        else {
-            Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
-            intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            else {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
         }
     }
 

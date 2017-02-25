@@ -38,17 +38,26 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class GemAPI {
     private final String TAG = "GemAPI";
-    private final String gemAPILocation = "http://90.90.5.106:3000/gem/get/";
+    private final String gemAPILocation = "http://goblin-attack.rmxhaha.tk/gem/get";
+    private GetGemListener listener;
+    private String mUserToken;
+    private String mGemToken;
 
     GemAPI(String gemToken){
         String userToken = FirebaseInstanceId.getInstance().getToken();
+        mUserToken = userToken;
+        mGemToken = gemToken;
+    }
+
+    public void run(){
         HashMap<String,String> postdata = new HashMap<>();
-        postdata.put("userToken", userToken);
-        postdata.put("gemToken", gemToken);
-        
+        postdata.put("userToken", mUserToken);
+        postdata.put("gemToken", mGemToken);
+
         String resp = performPostCall(gemAPILocation, postdata);
+        Log.v(TAG, resp);
+
         try {
-            Log.v(TAG, resp);
             JSONObject obj = new JSONObject(resp);
             int count = obj.getJSONObject("gem").getInt("count");
             String type = obj.getJSONObject("gem").getString("type");
@@ -56,10 +65,18 @@ public class GemAPI {
             Log.v(TAG, String.valueOf(count));
             Log.v(TAG, type);
 
+            this.listener.gemGotten(type, count);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
 
+    public void setGemGetListener(GetGemListener listener){
+        this.listener = listener;
+    }
+
+    public interface GetGemListener {
+        void gemGotten(String type, int count);
     }
 
     public String  performPostCall(String requestURL,
@@ -67,8 +84,10 @@ public class GemAPI {
 
         URL url;
         String response = "";
+        Log.v(TAG,requestURL);
         try {
             url = new URL(requestURL);
+            Log.v(TAG,url.getHost());
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000);
@@ -87,6 +106,7 @@ public class GemAPI {
             writer.close();
             os.close();
             int responseCode=conn.getResponseCode();
+            Log.v(TAG, String.valueOf(responseCode));
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 String line;

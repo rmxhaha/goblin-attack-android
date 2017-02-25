@@ -1,6 +1,7 @@
 package twice.pbdtest;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,6 +22,8 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
     private SensorManager mSensorManager;
     private Sensor sensor_acc;
     private Sensor sensor_mag;
+    SharedPreferences sharedpreferences;
+    public static final String MyPREFERENCES = "MyPrefs" ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

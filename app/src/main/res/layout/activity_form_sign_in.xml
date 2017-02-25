@@ -59,6 +59,8 @@
         android:layout_marginStart="25dp"
         android:layout_below="@+id/editTxtEmail"
         android:layout_alignStart="@+id/textView2"
+        android:background="@color/yellow"
+        android:textColor="@color/white"
         android:onClick="signIn" />
 
 </RelativeLayout>

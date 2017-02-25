@@ -1,11 +1,15 @@
 package twice.pbdtest;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -40,11 +44,29 @@ public class ChatActivity extends AppCompatActivity {
     public String senderUID;
     public String receiverUID;
     private FirebaseAuth mAuth;
+    SharedPreferences sharedpreferences;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        String channel = (sharedpreferences.getString("Brightness", ""));
+        System.out.println(channel);
+        if (Settings.System.canWrite(this)) {
+            // To handle the auto
+            Settings.System.putInt(this.getContentResolver(),
+                    Settings.System.SCREEN_BRIGHTNESS, 20);
+
+            WindowManager.LayoutParams lp = getWindow().getAttributes();
+            float f = Float.valueOf(channel);
+
+            lp.screenBrightness =f;// 100 / 100.0f;
+            getWindow().setAttributes(lp);
+        }
 
         mAuth = FirebaseAuth.getInstance();
         senderUID = mAuth.getCurrentUser().getUid();

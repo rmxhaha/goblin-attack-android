@@ -25,12 +25,12 @@
         android:text="Set Brightness"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="129dp"
         android:id="@+id/btn6"
         android:padding="16dp"
         android:background="@color/yellow"
         android:textColor="@color/white"
-        android:onClick="setBrightness" />
+        android:onClick="setBrightness"
+        android:layout_below="@+id/txtBrightness"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="57dp" />
 </RelativeLayout>

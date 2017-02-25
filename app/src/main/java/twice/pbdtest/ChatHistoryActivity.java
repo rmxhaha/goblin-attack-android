@@ -23,6 +23,7 @@ public class ChatHistoryActivity extends AppCompatActivity {
     ListView listView ;
     private FirebaseAuth mAuth;
     private String receiverUID;
+    private String receiverName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,8 @@ public class ChatHistoryActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         receiverUID = intent.getStringExtra("uid");
+        receiverName = intent.getStringExtra("name");
+        System.out.println(receiverName);
 
         mAuth = FirebaseAuth.getInstance();
         System.out.println(receiverUID);
@@ -61,17 +64,21 @@ public class ChatHistoryActivity extends AppCompatActivity {
 
         String[] body = new String[vecChat.size()];
         for(int i=0; i<vecChat.size(); i++){
-            body[i] = vecChat.get(i).body;
+            String str;
+            if(vecChat.get(i).flag==1){
+                str = "me : ";
+                System.out.println(str);
+            }
+            else{
+                str = receiverName + " : ";
+                System.out.println(str);
+            }
+            body[i] = str + vecChat.get(i).body;
             System.out.println(body[i]);
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, body);
-        for(int i=0; i<vecChat.size(); i++){
-            body[i] = vecChat.get(i).body;
-            System.out.println(body[i]);
-        }
-
         listView.setAdapter(adapter);
     }
 }

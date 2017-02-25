@@ -34,6 +34,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class ChatActivity extends AppCompatActivity {
     public String senderName;
+    public String receiverName;
     public String token;
     public String chattxt;
     public String senderUID;
@@ -53,7 +54,7 @@ public class ChatActivity extends AppCompatActivity {
 
         TextView hello = (TextView) findViewById(R.id.txtName);
         hello.setText(intent.getStringExtra("name"));
-
+        receiverName = intent.getStringExtra("name");
         FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference = fbdb.getReference("users");
         databaseReference.child(intent.getStringExtra("uid")).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -172,6 +173,7 @@ public class ChatActivity extends AppCompatActivity {
     public void callHistory(View view){
         Intent intentHistory = new Intent(this, ChatHistoryActivity.class);
         intentHistory.putExtra("uid",receiverUID);
+        intentHistory.putExtra("name",receiverName);
         startActivity(intentHistory);
     }
 }

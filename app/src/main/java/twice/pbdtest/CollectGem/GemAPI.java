@@ -39,44 +39,36 @@ import javax.net.ssl.HttpsURLConnection;
 public class GemAPI {
     private final String TAG = "GemAPI";
     private final String gemAPILocation = "http://goblin-attack.rmxhaha.tk/gem/get";
-    private GetGemListener listener;
     private String mUserToken;
     private String mGemToken;
 
-    GemAPI(String gemToken){
-        String userToken = FirebaseInstanceId.getInstance().getToken();
-        mUserToken = userToken;
+    GemAPI(String gemToken, String idToken){
+        mUserToken = idToken;
         mGemToken = gemToken;
     }
 
-    public void run(){
+    public Gem run(){
         HashMap<String,String> postdata = new HashMap<>();
-        postdata.put("userToken", mUserToken);
+        postdata.put("idToken", mUserToken);
         postdata.put("gemToken", mGemToken);
 
         String resp = performPostCall(gemAPILocation, postdata);
         Log.v(TAG, resp);
 
+        int count = -1;
+        String type = "Error";
         try {
             JSONObject obj = new JSONObject(resp);
-            int count = obj.getJSONObject("gem").getInt("count");
-            String type = obj.getJSONObject("gem").getString("type");
+            count = obj.getJSONObject("gem").getInt("count");
+            type = obj.getJSONObject("gem").getString("type");
 
             Log.v(TAG, String.valueOf(count));
             Log.v(TAG, type);
 
-            this.listener.gemGotten(type, count);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    public void setGemGetListener(GetGemListener listener){
-        this.listener = listener;
-    }
-
-    public interface GetGemListener {
-        void gemGotten(String type, int count);
+        return new Gem(count, type);
     }
 
     public String  performPostCall(String requestURL,

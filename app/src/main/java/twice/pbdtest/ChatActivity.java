@@ -132,6 +132,11 @@ public class ChatActivity extends AppCompatActivity {
                 FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
                 final DatabaseReference databaseReference = fbdb.getReference("users/" + senderUID + "/chats/" + receiverUID );
                 databaseReference.child(databaseReference.push().getKey()).setValue(c);
+
+                Chat c2 = new Chat(chattxt,0);
+                FirebaseDatabase fbdb2 = FirebaseDatabase.getInstance();
+                final DatabaseReference databaseReference2 = fbdb.getReference("users/" + receiverUID + "/chats/" + senderUID );
+                databaseReference.child(databaseReference.push().getKey()).setValue(c2);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JSONException e) {

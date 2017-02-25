@@ -33,12 +33,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
 
         mAuth = FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser()!=null) {
-            Chat c = new Chat(remoteMessage.getNotification().getBody(), 0);
-            FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
-            final DatabaseReference databaseReference = fbdb.getReference("users/" + mAuth.getCurrentUser().getUid() + "/chats/" + remoteMessage.getNotification().getTitle());
-            databaseReference.child(databaseReference.push().getKey()).setValue(c);
-        }
         getName(remoteMessage.getNotification().getTitle(),remoteMessage);
     }
 

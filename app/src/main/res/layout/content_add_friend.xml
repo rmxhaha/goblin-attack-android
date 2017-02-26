@@ -32,16 +32,14 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:text="@string/AddFriendButtonText"
+    <TextView
+        android:text=". . ."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/AddFriendInstruction"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="350dp"
-        android:padding="12dp"
-        android:background="@color/yellow"
-        android:textColor="@color/white"
-        android:id="@+id/button3" />
+        android:layout_marginBottom="42dp"
+        android:id="@+id/message" />
+
 
 </RelativeLayout>

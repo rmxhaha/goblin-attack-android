@@ -11,7 +11,7 @@
     tools:context="twice.pbdtest.ChatActivity">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtName"
         android:layout_alignParentTop="true"
@@ -27,16 +27,13 @@
         android:layout_marginEnd="14dp"
         android:id="@+id/editChat"
         android:hint="chat here" />
-    
-    <Button
-        android:text="History"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnHistory"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="callHistory"/>
-
+    <ListView
+        android:id="@+id/list"
+        android:layout_height="16dp"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/btnSend"
+        android:layout_below="@+id/txtName">
+    </ListView>
     <Button
         android:text="Send"
         android:layout_width="wrap_content"

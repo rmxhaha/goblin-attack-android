@@ -5,13 +5,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.appindexing.Action;
@@ -46,8 +49,58 @@ public class ChatActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     SharedPreferences sharedpreferences;
     public static final String MyPREFERENCES = "MyPrefs" ;
+    protected ListView listView ;
 
+    protected void initChatHistory(){
+        System.out.println(receiverName);
 
+        mAuth = FirebaseAuth.getInstance();
+        System.out.println(receiverUID);
+        FirebaseDatabase fbdb = FirebaseDatabase.getInstance();
+        final DatabaseReference databaseReference = fbdb.getReference("users");
+        databaseReference.child(mAuth.getCurrentUser().getUid() + "/chats/" + receiverUID).addValueEventListener(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Vector<Chat> vecChat = new Vector();
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    // TODO: handle the post
+                    Chat c = postSnapshot.getValue(Chat.class);
+                    vecChat.add(c);
+                }
+                listView = (ListView) findViewById(R.id.list);
+                initList(vecChat);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("cancelled");
+            }
+        });
+    }
+
+    public void initList(final Vector<Chat> vecChat){
+        listView = (ListView) findViewById(R.id.list);
+
+        String[] body = new String[vecChat.size()];
+        for(int i=0; i<vecChat.size(); i++){
+            String str;
+            if(vecChat.get(i).flag==1){
+                str = "me : ";
+                System.out.println(str);
+            }
+            else{
+                str = receiverName + " : ";
+                System.out.println(str);
+            }
+            body[i] = str + vecChat.get(i).body;
+            System.out.println(body[i]);
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, body);
+        listView.setAdapter(adapter);
+        listView.setSelection(listView.getCount()-1);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,16 +109,19 @@ public class ChatActivity extends AppCompatActivity {
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String channel = (sharedpreferences.getString("Brightness", ""));
         System.out.println(channel);
-        if (Settings.System.canWrite(this)) {
-            // To handle the auto
-            Settings.System.putInt(this.getContentResolver(),
-                    Settings.System.SCREEN_BRIGHTNESS, 20);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-            WindowManager.LayoutParams lp = getWindow().getAttributes();
-            float f = Float.valueOf(channel);
+            if (Settings.System.canWrite(this)) {
+                // To handle the auto
+                Settings.System.putInt(this.getContentResolver(),
+                        Settings.System.SCREEN_BRIGHTNESS, 20);
 
-            lp.screenBrightness =f;// 100 / 100.0f;
-            getWindow().setAttributes(lp);
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                float f = Float.valueOf(channel);
+
+                lp.screenBrightness = f;// 100 / 100.0f;
+                getWindow().setAttributes(lp);
+            }
         }
 
         mAuth = FirebaseAuth.getInstance();
@@ -103,6 +159,7 @@ public class ChatActivity extends AppCompatActivity {
                 System.out.println("cancelled");
             }
         });
+        initChatHistory();
     }
 
 
@@ -192,10 +249,4 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    public void callHistory(View view){
-        Intent intentHistory = new Intent(this, ChatHistoryActivity.class);
-        intentHistory.putExtra("uid",receiverUID);
-        intentHistory.putExtra("name",receiverName);
-        startActivity(intentHistory);
-    }
 }

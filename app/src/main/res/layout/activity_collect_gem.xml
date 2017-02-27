@@ -11,11 +11,12 @@
     tools:context="twice.pbdtest.CollectGem.CollectGemActivity">
 
     <TextView
-        android:text="Wait "
+        android:text="@string/collect_get_instruction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:gravity="center"
         android:layout_marginTop="69dp"
         android:id="@+id/instruction" />
 
@@ -24,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/instruction"
+        android:gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="81dp"
         android:id="@+id/message" />
